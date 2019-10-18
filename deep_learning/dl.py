@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
+from sklearn.metrics import confusion_matrix
 
 #1) Veri Önişleme
 #1.1) Veri Yükleme
@@ -36,7 +37,31 @@ X_test = sc.fit_transform(x_test)
 
 # Yapay Sinir Ağı
 classifier = Sequential()
-classifier.add(Dense(6, init = 'uniform',  activation = 'relu', input_dim = 11))
+classifier.add(Dense(6, init = 'uniform',  activation = 'relu', input_dim = 11)) # giriş katmanı
+classifier.add(Dense(6, init = 'uniform',  activation = 'relu'))
+classifier.add(Dense(6, init = 'uniform',  activation = 'sigmoid'))
+
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy']) # optimizasyon
+
+classifier.fit(X_train, y_train, epochs = 50)
+y_pred = classifier.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     
